@@ -4,26 +4,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>واجهة الطالب</title>
+    <title>واجهة الطالب - منصة التعليم الإلكتروني</title>
     <link rel="stylesheet" href="./Style.CSS">
+
 </head>
 
 <body>
-
     <!-- دوائر الخلفية -->
-    <div class="background-circle circle-left"></div>
-    <div class="background-circle circle-right"></div>
+    <div class="background-circle circle-1"></div>
+    <div class="background-circle circle-2"></div>
+    <div class="background-circle circle-3"></div>
 
-    <!-- محتوى الصفحة -->
-    <div class="container">
-        <h1 class="title">مرحبًا بك في منصة الطالب</h1>
-        <a href="./Account.html" class="nav-btn">تسجيل الدخول</a>
-        <button class="nav-btn">إنشاء حساب</button>
-        <button class="nav-btn">الامتحانات</button>
-        <button class="nav-btn">المتابعة الدورية</button>
-        <button class="nav-btn">المحتوى التعليمي</button>
-    </div>
+    <!-- القسم الأول - الترحيب -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">مرحبًا بك في منصة التعليم الإلكتروني</h1>
+            <p class="hero-subtitle">تجربة تعليمية متكاملة وحديثة لجميع المراحل الدراسية</p>
 
+            <div class="auth-buttons">
+                <a href="./Account.html" class="auth-btn login-btn">تسجيل الدخول</a>
+                <button class="auth-btn signup-btn">إنشاء حساب جديد</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم التعريف بالمنصة -->
+    <section class="about-section">
+        <div class="container">
+            <h2 class="about-title">عن المنصة</h2>
+            <p class="about-description">
+                منصة التعليم الإلكتروني هي بيئة تعليمية متطورة تهدف إلى تقديم تجربة تعليمية شاملة ومبتكرة.
+                نحن نسعى لجعل التعلم أكثر تفاعلية وإمتاعاً من خلال استخدام أحدث التقنيات والأساليب التعليمية.
+                منصتنا تدعم الطلاب في جميع مراحل رحلتهم التعليمية بأدوات ذكية ومحتوى عالي الجودة.
+            </p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎓</div>
+                    <h3 class="feature-title">تعليم متقدم</h3>
+                    <p class="feature-description">محتوى تعليمي عالي الجودة يواكب أحدث المناهج والمعايير التعليمية
+                        العالمية</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">متابعة دقيقة</h3>
+                    <p class="feature-description">نظام متابعة شامل يتيح للطلاب والمعلمين تتبع التقدم والأداء بدقة</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🌟</div>
+                    <h3 class="feature-title">تجربة مميزة</h3>
+                    <p class="feature-description">واجهة سهلة الاستخدام وتصميم حديث يجعل التعلم أكثر متعة وفعالية</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم الخدمات الرئيسية -->
+    <section class="services-section">
+        <div class="container">
+            <h2 class="services-title">خدماتنا الرئيسية</h2>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">📝</div>
+                    <h3 class="service-title">الامتحانات الإلكترونية</h3>
+                    <p class="service-description">
+                        نظام امتحانات متطور يوفر تجربة امتحان سلسة وآمنة مع تصحيح فوري ونتائج دقيقة.
+                        يدعم جميع أنواع الأسئلة من الاختيار المتعدد إلى الأسئلة المقالية.
+                    </p>
+                    <button class="service-btn">ادخل الامتحانات</button>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">📈</div>
+                    <h3 class="service-title">المتابعة الدورية</h3>
+                    <p class="service-description">
+                        نظام متابعة شامل يتيح للطلاب وأولياء الأمور معرفة مستوى التقدم والأداء الأكاديمي
+                        مع تقارير دورية مفصلة ونصائح للتحسين.
+                    </p>
+                    <button class="service-btn">عرض المتابعة</button>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">📚</div>
+                    <h3 class="service-title">المحتوى التعليمي</h3>
+                    <p class="service-description">
+                        مكتبة شاملة من المواد التعليمية تشمل الفيديوهات التفاعلية، الكتب الإلكترونية،
+                        والتمارين العملية لجميع المواد والمراحل الدراسية.
+                    </p>
+                    <button class="service-btn">تصفح المحتوى</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- الحاشية -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">© 2024 منصة التعليم الإلكتروني - جميع الحقوق محفوظة</p>
+        </div>
+    </footer>
 </body>
 
 </html>
