@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>امتحان الرياضيات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/Exams.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="exam-header">
+            <h1 class="exam-title">
+                <i class="fas fa-calculator"></i>
+                امتحان الرياضيات
+            </h1>
+            <div class="exam-info">
+                <div class="info-item">
+                    <i class="fas fa-question-circle"></i>
+                    عدد الأسئلة: 10
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    المدة: <span class="timer" id="timer">15:00</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-star"></i>
+                    درجة النجاح: 70%
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+        </div>
+
+        <form id="examForm">
+            <div id="questionsContainer"></div>
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-check"></i>
+                تسليم الامتحان
+            </button>
+        </form>
+    </div>
+
+    <!-- Result Modal -->
+    <!-- <div class="result-modal" id="resultModal">
+        <div class="result-content">
+            <div class="result-icon" id="resultIcon"></div>
+            <div class="result-score" id="resultScore"></div>
+            <div class="result-message" id="resultMessage"></div>
+            <button class="restart-btn" onclick="goToDashboard()">
+                <i class="fas fa-home"></i>
+                العودة للرئيسية
+            </button>
+
+        </div>
+    </div> -->
+
+    <script>
+        // الأسئلة والإجابات
+        const questions = [
+            {
+                question: "ما هو ناتج: 15 + 28 = ؟",
+                options: ["43", "41", "45", "42"],
+                correct: 0
+            },
+            {
+                question: "ما هو ناتج: 144 ÷ 12 = ؟",
+                options: ["11", "12", "13", "14"],
+                correct: 1
+            },
+            {
+                question: "ما هو ناتج: 7 × 8 = ؟",
+                options: ["54", "56", "58", "52"],
+                correct: 1
+            },
+            {
+                question: "ما هو الجذر التربيعي للعدد 64؟",
+                options: ["6", "7", "8", "9"],
+                correct: 2
+            },
+            {
+                question: "ما هو ناتج: 25% من 80 = ؟",
+                options: ["15", "20", "25", "30"],
+                correct: 1
+            },
+            {
+                question: "إذا كان x + 5 = 12، فما قيمة x؟",
+                options: ["5", "6", "7", "8"],
+                correct: 2
+            },
+            {
+                question: "ما هو ناتج: 2³ = ؟",
+                options: ["6", "8", "9", "12"],
+                correct: 1
+            },
+            {
+                question: "ما هو ناتج: 100 - 37 = ؟",
+                options: ["63", "73", "53", "67"],
+                correct: 0
+            },
+            {
+                question: "ما هو ناتج: 9 × 11 = ؟",
+                options: ["98", "99", "101", "100"],
+                correct: 1
+            },
+            {
+                question: "ما هو ناتج: 48 ÷ 6 = ؟",
+                options: ["7", "8", "9", "6"],
+                correct: 1
+            }
+        ];
+
+        let currentAnswers = {};
+        let timeLeft = 15 * 60; // 15 minutes in seconds
+        let timerInterval;
+
+        // العوده للصفحه الرئيسيه 
+        function goToDashboard() {
+            window.location.href = "login.html"; // غيّر اسم الصفحة حسب ما انت مسمّيها
+        }
+
+
+
+        // إنشاء الأسئلة
+        function createQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                questionCard.style.animationDelay = `${index * 0.1}s`;
+
+                questionCard.innerHTML = `
+                    <div class="question-number">${index + 1}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options">
+                        ${q.options.map((option, optIndex) => `
+                            <label class="option" for="q${index}_${optIndex}">
+                                <input type="radio" name="question_${index}" value="${optIndex}" id="q${index}_${optIndex}">
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(questionCard);
+            });
+
+            // إضافة event listeners للخيارات
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function () {
+                    const questionIndex = this.name.split('_')[1];
+                    currentAnswers[questionIndex] = parseInt(this.value);
+
+                    // تحديث شريط التقدم
+                    updateProgress();
+
+                    // تأثير بصري للخيار المختار
+                    const allOptions = document.querySelectorAll(`input[name="${this.name}"]`);
+                    allOptions.forEach(opt => {
+                        opt.closest('.option').classList.remove('selected');
+                    });
+                    this.closest('.option').classList.add('selected');
+                });
+            });
+        }
+
+        // تحديث شريط التقدم
+        function updateProgress() {
+            const answeredQuestions = Object.keys(currentAnswers).length;
+            const progressPercentage = (answeredQuestions / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progressPercentage + '%';
+        }
+
+        // بدء المؤقت
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        // تحديث عرض المؤقت
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const timerElement = document.getElementById('timer');
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            // تغيير لون المؤقت عند اقتراب الوقت
+            if (timeLeft <= 60) {
+                timerElement.style.color = '#e74c3c';
+                timerElement.style.animation = 'pulse 1s infinite';
+            } else if (timeLeft <= 300) {
+                timerElement.style.color = '#f39c12';
+            }
+        }
+
+        // تسليم الامتحان
+        function submitExam() {
+            clearInterval(timerInterval);
+
+            let score = 0;
+            const totalQuestions = questions.length;
+
+            // حساب النتيجة وإظهار الإجابات الصحيحة/الخاطئة
+            questions.forEach((q, index) => {
+                const userAnswer = currentAnswers[index];
+                const correctAnswer = q.correct;
+
+                if (userAnswer === correctAnswer) {
+                    score++;
+                }
+
+                // تلوين الإجابات
+                const questionOptions = document.querySelectorAll(`input[name="question_${index}"]`);
+                questionOptions.forEach((option, optIndex) => {
+                    const optionElement = option.closest('.option');
+
+                    if (optIndex === correctAnswer) {
+                        optionElement.classList.add('correct');
+                    } else if (optIndex === userAnswer && userAnswer !== correctAnswer) {
+                        optionElement.classList.add('incorrect');
+                    }
+                });
+            });
+
+            const percentage = Math.round((score / totalQuestions) * 100);
+
+            // إظهار النتيجة
+            setTimeout(() => {
+                showResult(score, totalQuestions, percentage);
+            }, 2000);
+
+            // إخفاء زر التسليم
+            document.querySelector('.submit-btn').style.display = 'none';
+        }
+
+        // إظهار النتيجة
+        function showResult(score, total, percentage) {
+            //  const modal = document.getElementById('resultModal');
+            // const icon = document.getElementById('resultIcon');
+            const scoreElement = document.getElementById('resultScore');
+            const messageElement = document.getElementById('resultMessage');
+
+            scoreElement.textContent = `${score} من ${total} (${percentage}%)`;
+
+            if (percentage >= 70) {
+                icon.innerHTML = '<i class="fas fa-trophy" style="color: #f1c40f;"></i>';
+                messageElement.textContent = 'مبروك! لقد نجحت في الامتحان بتفوق! 🎉';
+            } else if (percentage >= 50) {
+                icon.innerHTML = '<i class="fas fa-thumbs-up" style="color: #3498db;"></i>';
+                messageElement.textContent = 'أداء جيد! يمكنك تحسين أدائك أكثر في المرة القادمة.';
+            } else {
+                icon.innerHTML = '<i class="fas fa-sad-tear" style="color: #e74c3c;"></i>';
+                messageElement.textContent = 'للأسف لم تنجح هذه المرة. لا تيأس وحاول مرة أخرى!';
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        // إعادة بدء الامتحان
+        function restartExam() {
+            currentAnswers = {};
+            timeLeft = 15 * 60;
+            document.getElementById('resultModal').style.display = 'none';
+            document.querySelector('.submit-btn').style.display = 'block';
+
+            // إعادة تعيين الأسئلة
+            createQuestions();
+            updateProgress();
+            startTimer();
+
+            // تمرير إلى الأعلى
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // العودة للرئيسية
+        function goToDashboard() {
+            alert('العودة إلى الصفحة الرئيسية...');
+            // هنا يمكن إضافة كود للعودة للصفحة الرئيسية
+        }
+
+        // معالج تسليم النموذج
+        document.getElementById('examForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const answeredQuestions = Object.keys(currentAnswers).length;
+            if (answeredQuestions < questions.length) {
+                const confirm = window.confirm(`لم تجب على جميع الأسئلة. تم الإجابة على ${answeredQuestions} من ${questions.length} أسئلة. هل تريد التسليم؟`);
+                if (!confirm) return;
+            }
+
+            submitExam();
+        });
+
+        // تهيئة الامتحان
+        window.addEventListener('load', function () {
+            createQuestions();
+            startTimer();
+        });
+
+        // منع النسخ واللصق
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'a' || e.key === 'u')) {
+                e.preventDefault();
+            }
+        });
+
+        // تحذير عند مغادرة الصفحة
+        window.addEventListener('beforeunload', function (e) {
+            if (Object.keys(currentAnswers).length > 0) {
+                e.preventDefault();
+                e.returnValue = 'هل أنت متأكد أنك تريد مغادرة الامتحان؟';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/Account.css">
+</head>
+
+<body>
+    <div class="dashboard">
+        <h1>مرحبًا بك يا طالبنا المميز! 👋</h1>
+        <div class="cards">
+            <div>
+                <a href="Exams.html" class="card exams">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>الامتحانات</h3>
+                    <p>ادخل على الامتحانات الجديدة اللي المدرس نزلها ليك</p>
+                </a>
+
+            </div>
+
+            <div class="card content">
+                <a href="content.html" class="card content">
+                    <i class="fas fa-book-open"></i>
+                    <h3>المحتوى التعليمي</h3>
+                    <p>شوف الفيديوهات والملفات التعليمية هنا</p>
+                </a>
+            </div>
+            <div class="card tracking">
+                <a href="progress.html" class="card progress">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>المتابعة والتقييم</h3>
+                    <p>تابع تقدمك وشوف تقييمك الشهري</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 25000);
+        }
+
+        // Create particles continuously
+        setInterval(createParticle, 300);
+
+        // Ripple effect on click
+        function createRipple(event) {
+            const card = event.currentTarget;
+            const ripple = document.createElement('span');
+            const rect = card.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+
+            card.appendChild(ripple);
+
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+
+        // Add ripple effect to all cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', createRipple);
+        });
+
+        // Navigation function
+        function goTo(section) {
+            // Add a nice transition effect before navigation
+            document.body.style.transform = 'scale(0.95)';
+            document.body.style.opacity = '0.7';
+
+            setTimeout(() => {
+                // Here you would normally navigate to the section
+                console.log('Navigating to:', section);
+                alert(`الانتقال إلى قسم: ${section}`);
+
+                // Reset the transition
+                document.body.style.transform = 'scale(1)';
+                document.body.style.opacity = '1';
+            }, 300);
+        }
+
+        // Add entrance animation
+        window.addEventListener('load', () => {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+
+                setTimeout(() => {
+                    card.style.transition = 'all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+
+        // Add mouse parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.card');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            cards.forEach((card, index) => {
+                const speed = (index + 1) * 0.5;
+                const xPos = (x - 0.5) * speed;
+                const yPos = (y - 0.5) * speed;
+
+                card.style.transform += ` translate(${xPos}px, ${yPos}px)`;
+            });
+        });
+    </script>
+</body>
+
+</html>
